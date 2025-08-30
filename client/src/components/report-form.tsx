@@ -197,6 +197,27 @@ export default function ReportForm() {
 
               <FormField
                 control={form.control}
+                name="otherDetails"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Other Details</FormLabel>
+                      <FormControl>
+                        <Textarea
+                        placeholder="Enter any extra details (optional)"
+                        className="resize-vertical"
+                        rows={3}
+                        {...field}
+                        data-testid="textarea-other-details"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+
+              <FormField
+                control={form.control}
                 name="findings"
                 render={({ field }) => (
                   <FormItem>

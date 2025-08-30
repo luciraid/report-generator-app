@@ -42,6 +42,8 @@ export default function RecentReportsTable({ reports }: Props) {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exit Reason</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Findings</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Other Details</th>
+
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -60,9 +62,22 @@ export default function RecentReportsTable({ reports }: Props) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{safeText(report.outgoingPartNumber)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{formatEnum(report.modificationStatus)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{formatEnum(report.reasonForShopVisit)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">  {safeText(report.reason)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{formatEnum(report.shopExitReason)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{safeText(report.findings)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{safeText(report.actionsTaken)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <a
+                    href={`/api/reports/${report.id}/pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Download PDF
+                  </a>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{safeText(report.otherDetails)}</td>
+
               </tr>
             ))
           )}
