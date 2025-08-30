@@ -26,6 +26,9 @@ export const workshopReports = pgTable("workshop_reports", {
   // Findings and Actions
   findings: text("findings").notNull(),
   actionsTaken: text("actions_taken").notNull(),
+
+  // 👇 NEW FIELD
+  otherDetails: text("other_details"),   // optional free-text field
   
   // Meta Information
   createdAt: timestamp("created_at").defaultNow(),
