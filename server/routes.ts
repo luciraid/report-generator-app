@@ -1,15 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertWorkshopReportSchema } from "@shared/schema";
+import { db } from "./db";                 // your SQLite drizzle instance
+import { reports, insertWorkshopReportSchema, updateWorkshopReportSchema } from "../schema";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all workshop reports
   app.get("/api/reports", async (req, res) => {
     try {
-      const reports = await storage.getAllWorkshopReports();
-      res.json(reports);
+      const allReports = await db.select().from(reports);
+      res.json(allReports);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch reports" });
     }
@@ -18,10 +19,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get a specific workshop report
   app.get("/api/reports/:id", async (req, res) => {
     try {
-      const report = await storage.getWorkshopReport(req.params.id);
-      if (!report) {
-        return res.status(404).json({ message: "Report not found" });
-      }
+      const [report] = await db.select().from(reports).where(eq(reports.id, Number(req.params.id)));
+      if (!report) return res.status(404).json({ message: "Report not found" });
       res.json(report);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch report" });
@@ -32,12 +31,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/reports", async (req, res) => {
     try {
       const validatedData = insertWorkshopReportSchema.parse(req.body);
-      const report = await storage.createWorkshopReport(validatedData);
-      res.status(201).json(report);
+      const result = await db.insert(reports).values(validatedData).returning();
+      res.status(201).json(result[0]);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
       }
+      console.error(error);
       res.status(500).json({ message: "Failed to create report" });
     }
   });
@@ -45,12 +45,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update a workshop report
   app.put("/api/reports/:id", async (req, res) => {
     try {
-      const validatedData = insertWorkshopReportSchema.partial().parse(req.body);
-      const report = await storage.updateWorkshopReport(req.params.id, validatedData);
-      if (!report) {
-        return res.status(404).json({ message: "Report not found" });
-      }
-      res.json(report);
+      const validatedData = updateWorkshopReportSchema.parse(req.body);
+      const result = await db.update(reports).set(validatedData).where(eq(reports.id, Number(req.params.id))).returning();
+      if (!result[0]) return res.status(404).json({ message: "Report not found" });
+      res.json(result[0]);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
@@ -62,55 +60,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Delete a workshop report
   app.delete("/api/reports/:id", async (req, res) => {
     try {
-      const deleted = await storage.deleteWorkshopReport(req.params.id);
-      if (!deleted) {
-        return res.status(404).json({ message: "Report not found" });
-      }
+      const result = await db.delete(reports).where(eq(reports.id, Number(req.params.id))).returning();
+      if (!result[0]) return res.status(404).json({ message: "Report not found" });
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete report" });
     }
   });
 
-  // Search workshop reports
-  app.get("/api/reports/search", async (req, res) => {
-    try {
-      const filters = {
-        search: req.query.search as string,
-        reasonForShopVisit: req.query.reasonForShopVisit as string,
-        shopExitReason: req.query.shopExitReason as string,
-        dateFrom: req.query.dateFrom as string,
-        dateTo: req.query.dateTo as string,
-      };
-      
-      const reports = await storage.searchWorkshopReports(filters);
-      res.json(reports);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to search reports" });
-    }
-  });
-
-  // Get dashboard statistics
+  // Dashboard statistics
   app.get("/api/stats", async (req, res) => {
     try {
-      const allReports = await storage.getAllWorkshopReports();
+      const allReports = await db.select().from(reports);
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
-      
-      const thisMonthReports = allReports.filter(report => {
-        const reportDate = new Date(report.createdAt!);
-        return reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear;
+
+      const thisMonthReports = allReports.filter(r => {
+        const d = new Date(r.createdAt!);
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
       });
 
-      const componentsServiced = allReports.length;
-
-      const stats = {
+      res.json({
         totalReports: allReports.length,
         thisMonth: thisMonthReports.length,
-        componentsServiced,
-      };
-
-      res.json(stats);
+        componentsServiced: allReports.length,
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch statistics" });
     }
