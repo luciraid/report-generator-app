@@ -1,0 +1,126 @@
+{
+  "id": "435d38c3-cbec-41ad-b350-0cce210a189f",
+  "prevId": "33d4c03a-ffc3-4351-b82c-d60b0b669a26",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.workshop_reports": {
+      "name": "workshop_reports",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "report_number": {
+          "name": "report_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_of_manufacture": {
+          "name": "date_of_manufacture",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "incoming_part_number": {
+          "name": "incoming_part_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "incoming_serial_number": {
+          "name": "incoming_serial_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "outgoing_part_number": {
+          "name": "outgoing_part_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "outgoing_serial_number": {
+          "name": "outgoing_serial_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modification_status": {
+          "name": "modification_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason_for_shop_visit": {
+          "name": "reason_for_shop_visit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shop_exit_reason": {
+          "name": "shop_exit_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "findings": {
+          "name": "findings",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "actions_taken": {
+          "name": "actions_taken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "other_details": {
+          "name": "other_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "workshop_reports_report_number_unique": {
+          "name": "workshop_reports_report_number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "report_number"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "workshop_reports" ADD COLUMN "other_details" text;

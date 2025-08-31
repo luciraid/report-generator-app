@@ -8,6 +8,13 @@
       "when": 1756577308595,
       "tag": "0000_curious_mysterio",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1756628145539,
+      "tag": "0001_spicy_white_queen",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,11 @@
+// drizzle.config.ts
 import type { Config } from "drizzle-kit";
 
 export default {
-  schema: "./schema.ts",   // ✅ points to new schema file
+  schema: "./shared/schema.ts",
   out: "./migrations",
-  dialect: "sqlite",
+  dialect: "postgresql",    // ✅ Postgres only
   dbCredentials: {
-    url: "sqlite.db",
+    url: process.env.DATABASE_URL!,  // ✅ Neon URL from Railway env
   },
 } satisfies Config;
