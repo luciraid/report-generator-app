@@ -3,13 +3,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { insertWorkshopReportSchema, type InsertWorkshopReport } from "@shared/schema";
+import {
+  insertWorkshopReportSchema,
+  type InsertWorkshopReport,
+} from "@shared/schema";
 import { useLocation } from "wouter";
 
 export default function ReportForm() {
@@ -50,7 +66,8 @@ export default function ReportForm() {
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error.message || "Failed to create report. Please try again.",
+        description:
+          error.message || "Failed to create report. Please try again.",
         variant: "destructive",
       });
     },
@@ -64,13 +81,13 @@ export default function ReportForm() {
     <div className="max-w-2xl mx-auto">
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold" data-testid="text-form-title">New Workshop Report</h3>
+          <h3 className="text-lg font-semibold">New Workshop Report</h3>
         </CardHeader>
-        
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              
+              {/* Date of Manufacture */}
               <FormField
                 control={form.control}
                 name="dateOfManufacture"
@@ -78,13 +95,14 @@ export default function ReportForm() {
                   <FormItem>
                     <FormLabel>Date of Manufacture (DMF)</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} data-testid="input-dmf" />
+                      <Input type="date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* Incoming Part / Serial */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -93,13 +111,15 @@ export default function ReportForm() {
                     <FormItem>
                       <FormLabel>Incoming Part Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter incoming part number" {...field} data-testid="input-incoming-part" />
+                        <Input
+                          placeholder="Enter incoming part number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="incomingSerialNumber"
@@ -107,7 +127,10 @@ export default function ReportForm() {
                     <FormItem>
                       <FormLabel>Incoming Serial Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter incoming serial number" {...field} data-testid="input-incoming-serial" />
+                        <Input
+                          placeholder="Enter incoming serial number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -115,6 +138,7 @@ export default function ReportForm() {
                 />
               </div>
 
+              {/* Outgoing Part / Serial */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -123,13 +147,15 @@ export default function ReportForm() {
                     <FormItem>
                       <FormLabel>Outgoing Part Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter outgoing part number" {...field} data-testid="input-outgoing-part" />
+                        <Input
+                          placeholder="Enter outgoing part number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="outgoingSerialNumber"
@@ -137,7 +163,10 @@ export default function ReportForm() {
                     <FormItem>
                       <FormLabel>Outgoing Serial Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter outgoing serial number" {...field} data-testid="input-outgoing-serial" />
+                        <Input
+                          placeholder="Enter outgoing serial number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -145,23 +174,35 @@ export default function ReportForm() {
                 />
               </div>
 
+              {/* Modification Status */}
               <FormField
                 control={form.control}
                 name="modificationStatus"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Modification Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger data-testid="select-modification-status">
+                        <SelectTrigger>
                           <SelectValue placeholder="Select modification status" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="no-modification">No Modification</SelectItem>
-                        <SelectItem value="minor-modification">Minor Modification</SelectItem>
-                        <SelectItem value="major-modification">Major Modification</SelectItem>
-                        <SelectItem value="replacement">Replacement</SelectItem>
+                        <SelectItem value="no-modification">
+                          No Modification
+                        </SelectItem>
+                        <SelectItem value="minor-modification">
+                          Minor Modification
+                        </SelectItem>
+                        <SelectItem value="major-modification">
+                          Major Modification
+                        </SelectItem>
+                        <SelectItem value="replacement">
+                          Replacement
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -169,24 +210,34 @@ export default function ReportForm() {
                 )}
               />
 
+              {/* Reason for Shop Visit */}
               <FormField
                 control={form.control}
                 name="reasonForShopVisit"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Reason for Shop Visit</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger data-testid="select-visit-reason">
+                        <SelectTrigger>
                           <SelectValue placeholder="Select reason for visit" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="scheduled-maintenance">Scheduled Maintenance</SelectItem>
-                        <SelectItem value="unscheduled-repair">Unscheduled Repair</SelectItem>
+                        <SelectItem value="scheduled-maintenance">
+                          Scheduled Maintenance
+                        </SelectItem>
+                        <SelectItem value="unscheduled-repair">
+                          Unscheduled Repair
+                        </SelectItem>
                         <SelectItem value="inspection">Inspection</SelectItem>
                         <SelectItem value="overhaul">Overhaul</SelectItem>
-                        <SelectItem value="modification">Modification</SelectItem>
+                        <SelectItem value="modification">
+                          Modification
+                        </SelectItem>
                         <SelectItem value="testing">Testing</SelectItem>
                       </SelectContent>
                     </Select>
@@ -195,27 +246,7 @@ export default function ReportForm() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="otherDetails"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Other Details</FormLabel>
-                      <FormControl>
-                        <Textarea
-                        placeholder="Enter any extra details (optional)"
-                        className="resize-vertical"
-                        rows={3}
-                        {...field}
-                        data-testid="textarea-other-details"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
+              {/* Findings */}
               <FormField
                 control={form.control}
                 name="findings"
@@ -223,12 +254,11 @@ export default function ReportForm() {
                   <FormItem>
                     <FormLabel>Findings</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="Enter findings" 
-                        className="resize-vertical" 
-                        rows={4} 
-                        {...field} 
-                        data-testid="textarea-findings"
+                      <Textarea
+                        placeholder="Enter findings"
+                        className="resize-vertical"
+                        rows={3}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -236,6 +266,7 @@ export default function ReportForm() {
                 )}
               />
 
+              {/* Actions Taken */}
               <FormField
                 control={form.control}
                 name="actionsTaken"
@@ -243,12 +274,11 @@ export default function ReportForm() {
                   <FormItem>
                     <FormLabel>Actions Taken</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="Enter actions taken" 
-                        className="resize-vertical" 
-                        rows={4} 
-                        {...field} 
-                        data-testid="textarea-actions"
+                      <Textarea
+                        placeholder="Enter actions taken"
+                        className="resize-vertical"
+                        rows={3}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -256,25 +286,41 @@ export default function ReportForm() {
                 )}
               />
 
+              {/* Shop Exit Reason */}
               <FormField
                 control={form.control}
                 name="shopExitReason"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Shop Exit Reason</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger data-testid="select-exit-reason">
+                        <SelectTrigger>
                           <SelectValue placeholder="Select exit reason" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="repair-completed">Repair Completed</SelectItem>
-                        <SelectItem value="maintenance-completed">Maintenance Completed</SelectItem>
-                        <SelectItem value="inspection-completed">Inspection Completed</SelectItem>
-                        <SelectItem value="no-defect-found">No Defect Found</SelectItem>
-                        <SelectItem value="beyond-repair">Beyond Repair</SelectItem>
-                        <SelectItem value="awaiting-parts">Awaiting Parts</SelectItem>
+                        <SelectItem value="repair-completed">
+                          Repair Completed
+                        </SelectItem>
+                        <SelectItem value="maintenance-completed">
+                          Maintenance Completed
+                        </SelectItem>
+                        <SelectItem value="inspection-completed">
+                          Inspection Completed
+                        </SelectItem>
+                        <SelectItem value="no-defect-found">
+                          No Defect Found
+                        </SelectItem>
+                        <SelectItem value="beyond-repair">
+                          Beyond Repair
+                        </SelectItem>
+                        <SelectItem value="awaiting-parts">
+                          Awaiting Parts
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -282,19 +328,18 @@ export default function ReportForm() {
                 )}
               />
 
+              {/* Buttons */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-border">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => setLocation("/")}
-                  data-testid="button-cancel"
                 >
                   Cancel
                 </Button>
-                <Button 
+                <Button
                   type="submit"
                   disabled={createReportMutation.isPending}
-                  data-testid="button-submit"
                 >
                   {createReportMutation.isPending ? "Saving..." : "Save Report"}
                 </Button>

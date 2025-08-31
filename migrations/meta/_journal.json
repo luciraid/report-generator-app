@@ -15,6 +15,20 @@
       "when": 1756628145539,
       "tag": "0001_spicy_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1756628719479,
+      "tag": "0002_boring_logan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1756631698050,
+      "tag": "0003_sad_mongoose",
+      "breakpoints": true
     }
   ]
 }
